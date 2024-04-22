@@ -69,6 +69,8 @@ const Game = function () {
     
     let activePlayer = players[0];
 
+    //playTurn function will be invoked every time the board is clicked. 
+
     while (board.getBoardValues().map(row => row.filter(col => col === 0).join("")).join("").length !== 0) {
         console.log(board.getBoardValues())
         let playerMove = prompt("enter coords");
@@ -76,53 +78,43 @@ const Game = function () {
         let col = playerMove[1];
         if (row > 2 || col > 2) continue;
         board.placeToken(row, col, activePlayer.token);
-        if (checkForWinner(board.getBoardValues()).indexOf(1) !== -1) {
-            console.log(`${activePlayer.name} wins`)
-            return;
-        }
         activePlayer = activePlayer === players[0] ? players [1] : players[0];
     }
 
-    console.log("no more legal moves; players draw")
+    console.log("no more legal moves")
 }
-
-// logic to detect and announce winner below 
-
-const checkForWinner = (board) => {
-    let rows = checkRows(board)
-    let cols = checkCols(board)
-    let diag = checkDiag(board)
-    return [rows, cols, diag]
-}
-
-const checkRows = (board) => {
-    for(let row in board) {
-        if (board[row].filter(col => col === 1).length === 3) return 1;
-        if (board[row].filter(col => col === 2).length === 3) return 1; 
-    }
-    return -1
-}
-
-const checkCols = (board) => {
-    for (let row = 0; row < 3; row++){
-        let column = [];
-        for (let col in board[row]) {
-            column.push(board[col][row])
-        }
-        if (column.filter(cell => cell === 1).length === 3) return 1;
-        if (column.filter(cell => cell === 2).length === 3) return 1;
-    }
-    return -1
-}
-
-const checkDiag = (board) => {
-    const diaBtmLeft = [board[0][0], board[1][1], board[2][2]];
-    const diaTopLeft = [board[2][0], board[1][1], board[0][2]];
-    if (diaBtmLeft.filter(cell => cell === 1).length === 3 || diaTopLeft.filter(cell => cell === 1).length === 3) return 1;
-    if (diaBtmLeft.filter(cell => cell === 2).length === 3 || diaTopLeft.filter(cell => cell === 2).length === 3) return 1;
-    else return -1;
-}
-
-// run game on window load
 
 Game()
+
+
+
+
+
+/* 
+
+function test(board) {
+    let output = "";
+    for(let row in board) {
+        output += board[row].filter(col => col === 0).join("")
+    }
+    return output
+}
+function test2(board) {
+    return board.map(row => row.filter(col => col === 0).join("")).join("")
+}
+
+console.log(test2(array))
+
+____________________________________________________________________
+
+const switchPlayer = () => {
+        activePlayer = activePlayer === players[0] ? players[1] : players[0];
+    };
+
+    const currentPlayer = () => activePlayer;
+
+    const playRound = () => {
+        board.getBoardValues();
+        console.log(`${getActivePlayer().name}'s turn.`);
+    }
+*/
