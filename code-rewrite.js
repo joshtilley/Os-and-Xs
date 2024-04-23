@@ -11,9 +11,6 @@ const Gameboard = function () {
         }
     }
 
-    // function to return the board
-    const getBoard = () => board;
-
     // function allows the value stored within a Cell() function to be changed to a player's token after a move is made.  
     const placeToken = (row, col, player) => {
         // check if cell is empty (i.e. value = 0)
@@ -22,12 +19,11 @@ const Gameboard = function () {
             board[row][col].addToken(player)
         }
         else {
-            console.log("invalid move, cell occupied"); 
             return;
         }
     }
 
-    // returns a readable gameboard - the board as a 3x3 array of only the Cell()'s  value variable.  
+    // returns a readable gameboard - i.e. the values held in each Cell
     const getBoardValues = () => {
         const boardValues = board.map(
             (row) => row.map(
@@ -36,15 +32,13 @@ const Gameboard = function () {
         return boardValues
     }
 
-    // variables stored in gameboard can now only be interfaced with via the following functions:
     return {
-        getBoard,
         placeToken,
         getBoardValues
     }
 };
 
-// this function embeds the current value of a cell within a function.
+// function to control each cell of the gameboard and store its current value
 function Cell() {
     let value = 0;
 
@@ -60,7 +54,7 @@ function Cell() {
     }
 }
 
-// function to control the gameplay.
+// function to control the gameplay
 const Gameplay = function () {
     // creates gameboard within gameplay function. 
     const board = Gameboard();
@@ -108,7 +102,18 @@ const Gameplay = function () {
     }
 }
 
-// logic to check for a winner after each move. returns "1" when a winner is detected. 
+// function will check for legal moves. a legal move requires a free cell, and that there has been no winner. 
+const checkLegalMove = (board) => {
+    if (board.map(row => row.filter(col => col === 0).join("")).join("").length === 0) {return 1}
+
+    let gamewinner = checkForWinner(board);
+    if (gamewinner.indexOf(1) !== -1) {return 2}
+
+    else return 0;
+} 
+
+
+// logic to check for a winner after each move. returns "1" when a winner is detected.
 const checkForWinner = (board) => {
     const checkRows = (board) => {
         for(let row in board) {
@@ -152,47 +157,47 @@ const GameController = function() {
     // initialises the game
     let game = Gameplay();
 
-    // selects all cells
-    const cell_Buttons = document.querySelectorAll('.cell');
+    const gameboard_div = document.querySelector('.gameboard');
     
-    // assigns an event listener to each cell
-    cell_Buttons.forEach((cell) => {
-        cell.addEventListener('click', () => {
-            // adds player token to board UI
-            cell.innerHTML = `${game.getActivePlayer().display}`;
-            // updates the actual gameboard
-            game.playTurn(cell.id);
-            // checks for winner
-            if (checkForWinner(game.board()).indexOf(1) !== -1) {
-                console.log(`${game.getActivePlayer().name} wins`)               
-                return;
-            };
-            // checks for valid next move
-            if (game.board().map(row => row.filter(col => col === 0).join("")).join("").length === 0) {
-                console.log("No legal moves remain... it's a draw!")
-                return;
-            }
-            // if (game.board().forEach((row) => row.filter(cell => cell === 0).join("")).join("").length === 0) return;
-            game.switchPlayer();
-        });
-    })
+    function onClickHandler(e) {
+        if (!e.target.id) return;
+        let targetedCell = document.getElementById(`${e.target.id}`);
+        targetedCell.innerHTML = `${game.getActivePlayer().display}`;
+        game.playTurn(e.target.id);
+
+        switch (checkLegalMove(game.board())) {
+            case 1:
+                console.log("No legal moves remain... Draw.");
+                gameboard_div.removeEventListener('click', onClickHandler);
+                break;
+            case 2:
+                console.log(`${game.getActivePlayer().name} wins!`);
+                gameboard_div.removeEventListener('click', onClickHandler);
+                break;
+            case 0:
+                game.switchPlayer();
+        }
+    }
+
+    gameboard_div.addEventListener('click', onClickHandler)
 
     // function to initiate a new game
     const restartGame = () => {
         // iterates through all cells to clear UI 
-        for(let i = 0; i < 3; i++){
-            for (let j = 0; j < 3; j++) {
-                let currentId = "" + i + j
-                document.getElementById(`${currentId}`).innerHTML = ""
+        for(let row = 0; row < 3; row++){
+            for (let col = 0; col < 3; col++) {
+                let cell_Id = "" + row + col
+                document.getElementById(`${cell_Id}`).innerHTML = ""
             }
         }
         // initialises backend game state
         game = Gameplay();
+        gameboard_div.addEventListener('click', clickEventHandler)
     }
 
     const newGame_btn = document.getElementById("new-game");
 
-    newGame_btn.addEventListener('click', () => restartGame())
+    newGame_btn.addEventListener('click', restartGame)
 }
 
 GameController()    
