@@ -133,4 +133,13 @@ main {
     display: flex;
     justify-content: center;
     align-items: center;
+    font-size: 3rem;
+}
+
+.cell i {
+    font-size: 3rem;
+}
+
+.cell-disable {
+    display: none;
 }
