@@ -18,50 +18,74 @@
                 Noughts and Crosses
             </h1>
         </div>
-        <button id="new-game">New Game</button>
+        <button class="hide" id="new-game">~ New Game ~</button>
     </header>
     <main>
         <div class="gameboard">
             <!-- top row -->
             <div class="cell-container">
-                <div class="cell" id="20">
+                <div class="cell cell-active" id="20">
                 </div>
             </div>
             <div class="cell-container">
-                <div class="cell" id="21">
+                <div class="cell cell-active" id="21">
                 </div>
             </div>
             <div class="cell-container">
-                <div class="cell" id="22">
+                <div class="cell cell-active" id="22">
                 </div>
             </div>
             <!-- middle row -->
             <div class="cell-container">
-                <div class="cell" id="10">
+                <div class="cell cell-active" id="10">
                 </div>
             </div>
             <div class="cell-container">
-                <div class="cell" id="11">
+                <div class="cell cell-active" id="11">
                 </div>
             </div>
             <div class="cell-container">
-                <div class="cell" id="12">
+                <div class="cell cell-active" id="12">
                 </div>
             </div>
             <!-- bottom row -->
             <div class="cell-container">
-                <div class="cell" id="00">
+                <div class="cell cell-active" id="00">
                 </div>
             </div>
             <div class="cell-container">
-                <div class="cell" id="01">
+                <div class="cell cell-active" id="01">
                 </div>
             </div>
             <div class="cell-container">
-                <div class="cell" id="02">
+                <div class="cell cell-active" id="02">
                 </div>
             </div>
         </div>
     </main>
+    <div class="modal-container">
+        <div class="names-modal">
+            <div class="names-form-container">
+                <div class="player-name">
+                    <label>
+                        <i class="fa-regular fa-circle"></i>
+                        <span>Enter your name:</span>
+                        <input type="text" value="Player One" id="player1-name" class="name-input">
+                    </label>
+                    <label>
+                        <i class="fa-regular fa-x"></i>
+                        <span>Enter your name:</span>
+                        <input type="text" value="Player Two" class="name-input" id="player2-name">
+                    </label>
+                </div>
+                <div class="game-start-btn">
+                    <button id="submit">START GAME</button>
+                </div>
+            </div>
+        </div>
+        <div class="results-modal hide" id="results-modal">
+            
+        </div>
+    </div>
 </body>
 </html>
